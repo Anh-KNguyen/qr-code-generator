@@ -1,6 +1,6 @@
 name = "qr-code-generator"
-type = "javascript"
-account_id = ""
+type = "webpack"
+account_id = "5c05622eb52394818456c2b22b81a1f6"
 workers_dev = true
 route = ""
 zone_id = ""
