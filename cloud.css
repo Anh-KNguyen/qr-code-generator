@@ -1,56 +1,7 @@
-const qr = require('qr-image')
+/*Lets start with the cloud formation rather*/
 
-const generate = async request => {
-  const {text} = await request.json()
-  const qr_svg = qr.imageSync(text || "http://anhknguyen.com", {type: 'svg'})
-  const headers = {"Content-Type": "image/svg+xml"}
-  return new Response(qr_svg, {headers})
-}
+/*The container will also serve as the SKY*/
 
-const landing = `
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<div id="clouds">
-	<div class="cloud x1"></div>
-	<div class="cloud x2"></div>
-	<div class="cloud x3"></div>
-	<div class="cloud x4"></div>
-	<div class="cloud x5"></div>
-</div>
-<div class="container">
-  <div class="row">
-    <div class="col-md-6 offset-md-3">
-      <div style="text-align:center;margin-top:-250px">
-        <h1 class="w3-text-teal" style="font-family:Tahoma, Verdana, Segoe, sans-serif">Generate a QR Code</h1>
-        <div class="input-group mb-3" style="padding-top:20px">
-          <input id="text" type="text" class="form-control" placeholder="Your URL here..">
-          <div class="input-group-append">
-            <button class="btn btn-info" type="button" onclick="generate()">Generate QR</button>
-          </div>
-        </div>
-        <body>
-          <div id="myQrCode" style="width:200px;height:200px;display:block;margin:auto;padding-top:60px"></div>
-        </body>
-      </div>
-    </div>
-  </div>
-</div>
-<script>
-  function generate() {
-    fetch(window.location.pathname, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: document.querySelector("#text").value })
-    })
-    .then(response => response.text())
-    .then((text) => {
-      let svgStr = text;
-      let svg = document.getElementById('myQrCode');
-      svg.innerHTML = svgStr;
-    });
-  }
-</script>
-<style>
 *{ margin: 0; padding: 0;}
 
 body {
@@ -173,18 +124,3 @@ body {
 	0% {margin-left: 1000px;}
 	100% {margin-left: -1000px;}
 }
-</style>
-`
-
-async function handleRequest(request) {
-  if (request.method === "POST") {
-    response = await generate(request)
-  } else {
-    response = new Response(landing, { headers: { "Content-Type": "text/html" } })
-  }
-  return response
-}
-
-addEventListener("fetch", event => {
-  event.respondWith(handleRequest(event.request))
-})
